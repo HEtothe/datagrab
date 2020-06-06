@@ -12,8 +12,10 @@ class RetrievedResponse:
 
     """
 
-    def __init__(self, url):
+    def __init__(self, url, headers=None, params=None):
         self.url = url
+        self.headers = headers
+        self.params = params
 
     def getResponse(self, timeout=15):
         """
@@ -22,7 +24,9 @@ class RetrievedResponse:
         """
 
         try:
-            self.response = requests.get(self.url, timeout=timeout)
+            self.response = requests.get(self.url, timeout=timeout,
+            headers=self.headers,
+            params=self.params)
 
         except Timeout:
             # Server taking too long to respond
@@ -31,8 +35,9 @@ class RetrievedResponse:
 
         except HTTPError:
             #Invalid HTTP response - probably the result of URL typo
-            self.errorMsg = "Your URL {} produced an invalid HTTP response, exiting."\
-                  .format(self.url)
+            self.errorMsg = \
+                "Your URL {} produced an invalid HTTP response, exiting."\
+                .format(self.url)
 
         except ConnectionError:
             #DNS failure, refused connection etc.
@@ -50,7 +55,8 @@ class RetrievedResponse:
 
     def validateResponse(self):
         """ensures that the response code is 200"""
-        assert self.response.status_code==200, "Data not retrieved"
+        assert self.response.status_code==200, "Data not retrieved,"\
+                        " response code {}".format(self.response.status_code)
 
     def getValidate(self, timeout=15):
         "Combined implementation of getResponse and validateResponse"
