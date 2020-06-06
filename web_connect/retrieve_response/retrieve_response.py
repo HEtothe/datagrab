@@ -55,8 +55,10 @@ class RetrievedResponse:
     def getValidate(self, timeout=15):
         "Combined implementation of getResponse and validateResponse"
         self.getResponse(timeout=timeout)
+
         if hasattr(self, "response"):
             self.validateResponse()
+
         else:
             print("The HTTP request failed.")
             print("This is most often due to not inputting the full URL,"\
