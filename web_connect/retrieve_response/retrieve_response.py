@@ -9,24 +9,32 @@ from requests.exceptions import (
 
 class RetrievedResponse:
     """
+    Class simplifying http response retrieval via requests library,
+    with builtin exception handling.
 
+    Parameters:
+
+        url: string
+            The URL to which the request is to be sent
+
+        request_kwargs:
+            Dictionary of keyword arguments to pass to the requests.get
+            function, e.g. 'headers', 'params', 'proxies' etc.
     """
 
-    def __init__(self, url, headers=None, params=None):
+    def __init__(self, url: str, request_kwargs={'headers':None}):
         self.url = url
-        self.headers = headers
-        self.params = params
+        self.request_kwargs = request_kwargs
 
     def getResponse(self, timeout=15):
         """
-        Uses self.url to generate a request response.
+        Uses self.url and request_kwargs to generate a request response.
         Creates self.response
         """
 
         try:
             self.response = requests.get(self.url, timeout=timeout,
-            headers=self.headers,
-            params=self.params)
+                            **self.request_kwargs)
 
         except Timeout:
             # Server taking too long to respond
