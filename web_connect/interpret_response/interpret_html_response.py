@@ -2,16 +2,16 @@ from bs4 import BeautifulSoup
 
 class ResponseInterpreter:
 
-    def __init__(self, requestResponse):
+    def __init__(self, requestResponse, bs_features="lxml"):
         self.requestResponse = requestResponse
-        self.parse_response()
+        self.parse_response(features=bs_features)
 
-    def parse_response(self):
+    def parse_response(self, features="lxml"):
         """
         Takes a request response and parses it using BeautifulSoup module.
         """
         html = self.requestResponse.text
-        self.parsed_text = BeautifulSoup(html)
+        self.parsed_text = BeautifulSoup(html, features=features)
 
     def getElementsByType(self, tag, attrs=None):
         """
@@ -19,12 +19,15 @@ class ResponseInterpreter:
 
         tag: string
         the tag name, e.g. "p" for a <p> tag
-        attrs: dict
+        attrs: dict or string
         attribute values of the target elements, e.g.
         {"href":"http://www.bbc.co.uk"}
+        OR
+        presence of a specific attribute
         """
 
-        attrs = {attrs:True} if isinstance(attrs,str) else attrs
+        attrs = {attrs:True} if isinstance(attrs,str)\ #Looking for elements which a specific attribute
+                    else attrs # Looking for elements with a specific attribute value
 
         elements = self.parsed_text.findAll(tag, attrs=attrs) if attrs else \
                 self.parsed_text.findAll(tag)

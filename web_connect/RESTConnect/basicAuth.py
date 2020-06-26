@@ -9,10 +9,16 @@ class BasicAuth:
         The API key as given to you by the API provider
     """
 
-    def __init__(self,appKey):
+    def __init__(self, user, key=False):
         "Converts appKey to bites and executes buildHeader method"
 
-        self.appKey = bytes(appKey,"utf-8")
+        self.user = bytes(user,"utf-8")
+
+        if key:
+            self.key  = bytes(key,"utf-8")
+        else:
+            self.key = key
+
         self.buildHeader()
 
     def buildHeader(self):
@@ -28,7 +34,11 @@ class BasicAuth:
 
         Arguments: none
         """
-        userString = self.appKey+b":"
+        if self.key:
+            userString = self.user+b":"+self.key
+        else:
+            userString = self.user+b":"
+            
         encodedUserString = b64encode(userString)
         decodedUserString = encodedUserString.decode("ascii")
         self.basicAuthHeader = {"Authorization": "Basic " + decodedUserString}
