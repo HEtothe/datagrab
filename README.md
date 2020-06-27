@@ -1,4 +1,4 @@
-# datagrab - the easy way to access and query textual web resources!
+# datagrab - the easy way to access and interpret textual web resources!
 
 ## Overview
 
@@ -6,7 +6,8 @@ Let's be clear: [requests](https://realpython.com/python-requests/) is an awesom
 But even so, some really basic use cases still seem to require a lot of lines of code!
 
 datagrab was written as a set of classes and methods designed to simplify
-using the [requests library](https://realpython.com/python-requests/) for some typical use cases.
+using the [requests library](https://realpython.com/python-requests/) for some typical
+web scraping and REST API use cases.
 In short: download, parse and process the returned text easily, so you are closer to doing something useful with it.
 
 - Request data and ensure the desired result arrived with a single method (retrieve_response module)
