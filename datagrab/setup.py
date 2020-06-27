@@ -15,7 +15,7 @@ setup(
     description="The easy way to access and interpret textual web resources",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/datagrab",
+    url="https://github.com/HEtothe/datagrab",
     author="HEtothe",
     license="MIT",
     classifiers=[
