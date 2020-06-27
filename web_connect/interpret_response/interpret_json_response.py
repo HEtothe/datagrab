@@ -1,5 +1,12 @@
-from bs4 import BeautifulSoup
 import json
+
+def query_json(dictionary: dict, key, value) -> dict:
+    target_records = query_json_with_func(dictionary, lambda x: x[key] == value)
+    return target_records
+
+def query_json_with_func(dictionary: dict, func) -> filter:
+    target_records = filter(func, dictionary)
+    return target_records
 
 class JsonResponseInterpreter:
 
@@ -25,14 +32,7 @@ class JsonResponseInterpreter:
         Parses self.requestResponseText into attribute .jsonDict
         """
         self.jsonDict = json.loads(self.requestResponseText)
-
-    def query_json(self, key, value):
-        target_records = self.query_json_with_func(lambda x: x[key] == value)
-        return target_records
-
-    def query_json_with_func(self, func):
-        target_records = filter(func, self.jsonDict)
-        return target_records
+        self.jsonRoot = self.jsonDict.keys()
 
     def json_tree_traverse(self, tree_traverse_keys: list):
         """
@@ -47,7 +47,7 @@ class JsonResponseInterpreter:
         the dictionary.
 
         returns: any type (depends on what is at the node / leaf where the
-        traverse_keys stops)
+        traverse_keys stop)
         """
 
         #Enusure you don't hit recursionerror

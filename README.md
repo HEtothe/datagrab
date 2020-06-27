@@ -164,25 +164,29 @@ One of the more cumbersome parts of working with JSON data is acttually getting
 to the node that you're interested in. This requires a lot of square brackets, in
 our case
 
-    my_data['foo']['bar']['banana']
+    jri.jsonDict["CompactData"]["DataSet"]["Series"]["Obs"]
 
-Writing all of those square brackets is boring.
+Writing all of those square brackets is boring, error-prone and non-intuitive.
 
 What we want to do is feed to a function a list representing the node path that we want
 to traverse. Well, since you asked...
 
-    # We need first to identify the root node
-    >>> jri.jsonDict.keys()
+    # We need first to identify the root node(s)
+    # Most data API's return JSON output with a single root.
+
+    >>> jri.jsonRoot
     dict_keys(['CompactData'])
 
 To check out the children of this first node, we can start using a
-convenience method attached to our `jri` object: `jri.tree_traverse_keys`
+convenience method attached to our `jri` object: `jri.json_tree_traverse`
 
-    >>> jri.tree_traverse_keys('CompactData').keys()
+    # Accessing only the keys keeps size of output manageable, but is optional
+
+    >>> jri.json_tree_traverse(['CompactData']).keys()
     dict_keys(['@xmlns:xsi', '@xmlns:xsd', '@xsi:schemaLocation', '@xmlns',
     'Header', 'DataSet'])
 
-Bingo! The bit we're interested in is the data set.
+Bingo! The bit we're interested in is the `"DataSet"` child nodes.
 
     >>> jri.json_tree_traverse(["CompactData","DataSet"])
     {'@xmlns': 'http://dataservices.imf.org/compact/IFS',
@@ -197,9 +201,41 @@ Bingo! The bit we're interested in is the data set.
     {'@TIME_PERIOD': '2010-03', '@OBS_VALUE': '100.391389432485'},
     ...
 
-    # So, it seems we need to go to the 'Obs' node to get the actual data.
+    # So, it seems we need to traverse to the 'Series'->'Obs' node to get the actual data.
 
     >>> import_price_index_data = jri.json_tree_traverse(
-        ["CompactData", "DataSet", "Obs"]
-        )
-    
+          ["CompactData", "DataSet","Series", "Obs"])
+
+    >>> import_price_index_data[:3]
+    [{'@TIME_PERIOD': '2010-01', '@OBS_VALUE': '96.7710371819961'},
+     {'@TIME_PERIOD': '2010-02', '@OBS_VALUE': '97.5538160469667'},
+     {'@TIME_PERIOD': '2010-03', '@OBS_VALUE': '100.391389432485'}]
+
+So far, so good.
+
+But now, let's say we want to take what we've got and just look at the value
+for January 2011.
+
+We have a convenience function for this!
+
+    >>> from web_connect.interpret_response.interpret_json_response import (
+     query_json_with_func, query_json)
+
+    # query_json allows you to query based on the key-value pair
+
+    >>> jan_2010 = query_json(import_price_index_data,"@TIME_PERIOD","2011-01")  
+
+Often, you'll actually want to do more sophisticated queries. For example, you
+might want to see change over time for a specific period of the year.
+
+`query_json_with_func` is a more flexible option. You can pass it your own
+filter function.
+
+    >>> jan_all = query_json_with_func(import_price_index_data,
+                        lambda x: x["@TIME_PERIOD"][-3:]=="-01")
+
+    # query_json_with_func returns a `filter` so we'll view it here as a list.
+
+    >>> list(jan_all)
+    [{'@TIME_PERIOD': '2010-01', '@OBS_VALUE': '96.7710371819961'},
+     {'@TIME_PERIOD': '2011-01', '@OBS_VALUE': '104.598825831703'}]
