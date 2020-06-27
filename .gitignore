@@ -1,3 +1,6 @@
 **/__pycache__/
 **/webConnectTestScript.py
 **/jsonTest.py
+**/dist/
+**/build/
+*.egg-info
