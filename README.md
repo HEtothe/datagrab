@@ -1,11 +1,11 @@
-# web_connect - the easy way to access and query textual web resources!
+# datagrab - the easy way to access and query textual web resources!
 
 ## Overview
 
 Let's be clear: [requests](https://realpython.com/python-requests/) is an awesome library.
 But even so, some really basic use cases still seem to require a lot of lines of code!
 
-web_connect was written as a set of classes and methods designed to simplify
+datagrab was written as a set of classes and methods designed to simplify
 using the [requests library](https://realpython.com/python-requests/) for some typical use cases.
 In short: download, parse and process the returned text easily, so you are closer to doing something useful with it.
 
@@ -17,7 +17,7 @@ In short: download, parse and process the returned text easily, so you are close
 
 ## Getting it
 
-To download web_connect, either fork this github repo or simply use Pypi via pip.
+To download datagrab, either fork this github repo or simply use Pypi via pip.
 
 ## Using it
 
@@ -28,8 +28,8 @@ To download web_connect, either fork this github repo or simply use Pypi via pip
 Let's assume the server is not expecting any specific header or other content:
 
     # RetrievedResponse is the class used to get the raw http response
-    >>> from web_connect.retrieve_response.retrieve_response import RetrievedResponse
-    >>> from web_connect.interpret_response.interpret_html_response import (
+    >>> from datagrab.retrieve_response.retrieve_response import RetrievedResponse
+    >>> from datagrab.interpret_response.interpret_html_response import (
       ResponseInterpreter)
 
     >>> rr = RetrievedResponse("https://www.bbc.co.uk")
@@ -110,8 +110,8 @@ you do as above up to rr.getValidate().
 But if you need [Basic Auth](https://en.wikipedia.org/wiki/Basic_access_authentication),
 we've got you covered with the following...
 
-    >>> from web_connect.RESTConnect.basicAuth import BasicAuth
-    >>> from web_connect.retrieve_response.retrieve_response import RetrievedResponse
+    >>> from datagrab.RESTConnect.basicAuth import BasicAuth
+    >>> from datagrab.retrieve_response.retrieve_response import RetrievedResponse
 
     >>> ba = basicAuth(<my_username>, key=<my_app_key>) # Has attribute .basicAuthHeader
 
@@ -141,7 +141,7 @@ Most RESTful services these days return data in JSON format -- unless you're usi
 steam-powered enterprise ERP's and the like, in which case you're still using
 xml (for which the interpret_html_response examples above should do the job).
 
-    from web_connect.interpret_response.interpret_json_response import JsonResponseInterpreter
+    from datagrab.interpret_response.interpret_json_response import JsonResponseInterpreter
 
 This example draws on [Brian Dew's brilliant example of using the IMF's data api](
   http://www.bd-econ.com/imfapi1.html). This query delivers monthly import price
@@ -218,7 +218,7 @@ for January 2011.
 
 We have a convenience function for this!
 
-    >>> from web_connect.interpret_response.interpret_json_response import (
+    >>> from datagrab.interpret_response.interpret_json_response import (
      query_json_with_func, query_json)
 
     # query_json allows you to query based on the key-value pair
