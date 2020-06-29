@@ -14,7 +14,13 @@ In short: download, parse and process the returned text easily, so you are close
 - Connect to REST API services with Basic Authentication implemented for you (RESTConnect module)
 - Parse the data and use simple functions to pull out the desired data (interpret_response module)
 
-# Usage
+## Requirements
+1. python3
+2. BeautifulSoup
+3. json (native Python since version 2.6)
+3. requests
+
+## Usage
 
 ## Getting it
 
