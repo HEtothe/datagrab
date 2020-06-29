@@ -25,9 +25,10 @@ class ResponseInterpreter:
         OR
         presence of a specific attribute
         """
-
-        attrs = {attrs:True} if isinstance(attrs,str)\ #Looking for elements which a specific attribute
-                    else attrs # Looking for elements with a specific attribute value
+         # Looking for elements which a specific attribute,
+         # else looking for elements with a specific attribute value
+        attrs = {attrs:True} if isinstance(attrs,str)\
+                    else attrs
 
         elements = self.parsed_text.findAll(tag, attrs=attrs) if attrs else \
                 self.parsed_text.findAll(tag)
