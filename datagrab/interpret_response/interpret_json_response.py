@@ -1,4 +1,5 @@
 import json
+from .json_visualize import create_tree_from_json
 
 def query_json(dictionary: dict, key, value) -> dict:
     target_records = query_json_with_func(dictionary, lambda x: x[key] == value)
@@ -71,3 +72,10 @@ class JsonResponseInterpreter:
                 return get_next_level(remaining_keys, tree)
 
         return get_next_level(tree_traverse_keys,localTree)
+
+    def create_visual_json_tree(self):
+        self.json_tree = create_tree_from_json(self.jsonDict)
+
+    def visualize_json(self):
+        self.create_visual_json_tree()
+        self.json_tree.show()

@@ -167,27 +167,62 @@ our case
 
     jri.jsonDict["CompactData"]["DataSet"]["Series"]["Obs"]
 
-Writing all of those square brackets is boring, error-prone and non-intuitive.
+Firstly, how do we know that this is the correct series of brackets?
+
+The "easiest" way of getting to grips with a JSON data structure is normally to
+dump it to a json file and use a desktop IDE to explore it.
+But suppose we're on a work machine which doesn't let us install anything so
+nice, or we just don't want to go through the hassle of yet another window on
+our already cluttered desktop.
+
+You'll be pleased to know that our JsonResponseInterpreter has a solution for
+that, which is based on the `treelib` library. It allows us to view a hierarchical
+element tree of all the nodes in the JSON
+
+    >>>jri.visualize_json()
+    CompactData
+    ├── @xmlns
+    ├── @xmlns:xsd
+    ├── @xmlns:xsi
+    ├── @xsi:schemaLocation
+    ├── CompactData
+    ├── DataSet
+    │   ├── @xmlns
+    │   └── Series
+    │       ├── @BASE_YEAR
+    │       ├── @FREQ
+    │       ├── @INDICATOR
+    │       ├── @REF_AREA
+    │       ├── @TIME_FORMAT
+    │       ├── @UNIT_MULT
+    │       └── Obs
+    └── Header
+        ├── DataSetID
+        ├── ID
+        ├── Prepared
+        ├── Receiver
+        │   └── @id
+        ├── Sender
+        │   ├── @id
+        │   ├── Contact
+        │   │   ├── Telephone
+        │   │   └── URI
+        │   └── Name
+        │       ├── #text
+        │       └── @xml:lang
+        └── Test
+
+But we still have the following problem:
+
+*Writing all of those square brackets is boring, error-prone and non-intuitive.*
 
 What we want to do is feed to a function a list representing the node path that we want
 to traverse. Well, since you asked...
 
-    # We need first to identify the root node(s)
-    # Most data API's return JSON output with a single root.
-
-    >>> jri.jsonRoot
-    dict_keys(['CompactData'])
-
-To check out the children of this first node, we can start using a
+To check out a particular point on the element tree, we can start using a
 convenience method attached to our `jri` object: `jri.json_tree_traverse`
 
-    # Accessing only the keys keeps size of output manageable, but is optional
-
-    >>> jri.json_tree_traverse(['CompactData']).keys()
-    dict_keys(['@xmlns:xsi', '@xmlns:xsd', '@xsi:schemaLocation', '@xmlns',
-    'Header', 'DataSet'])
-
-Bingo! The bit we're interested in is the `"DataSet"` child nodes.
+The bit we're interested in is the `"DataSet"` child nodes.
 
     >>> jri.json_tree_traverse(["CompactData","DataSet"])
     {'@xmlns': 'http://dataservices.imf.org/compact/IFS',
