@@ -52,3 +52,9 @@ def create_tree_from_json(jsonDict):
 
     tree = add_nodes(tree, jsonDict, parent_node=rootNodeName)
     return tree
+
+def visualize_json(jsonDict):
+
+    tree = create_tree_from_json(jsonDict)
+    tree.show()
+    return

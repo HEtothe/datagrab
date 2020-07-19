@@ -11,7 +11,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="datagrab",
-    version="0.1.3",
+    version="0.1.4",
     description="The easy way to access and interpret textual web resources",
     long_description=README,
     long_description_content_type="text/markdown",
